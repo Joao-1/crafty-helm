@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: crafty
+  name: crafty-service
   labels:
     app: crafty
+    scope: games
 spec:
   ports:
   - name: web

@@ -41,10 +41,6 @@ spec:
         - name: minecraft3
           containerPort: 25567
           hostPort: 25567
-        livenessProbe:
-{{ toYaml .Values.crafty.livenessProbe | indent 10 }}
-        readinessProbe:
-{{ toYaml .Values.crafty.livenessProbe | indent 10 }}
         volumeMounts:
         - name: crafty-data
           mountPath: /crafty/backups
