@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: crafty
+  annotations:
+{{- if .Values.ingress.annotations }}
+{{ toYaml .Values.ingress.annotations | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.ingress.tls.enabled }}
+  tls:
+  - hosts:
+    - {{ template "fqdn" . }}
+    - {{ "maps" }}.{{ template "fqdn" . }}
+    secretName: tls-cert
+{{- end }}
+  rules:
+  - host: {{ template "fqdn" . }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: crafty
+            port:
+              number: 8443
+  - host: {{ "maps" }}.{{ template "fqdn" . }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: crafty
+            port:
+              number: 8123

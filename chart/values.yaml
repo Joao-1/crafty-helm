@@ -1,0 +1,27 @@
+# Default values for chart.
+replicaCount: 1
+strategyType: Recreate
+deploymentApiVersion: apps/v1
+image:
+  repository: registry.gitlab.com/crafty-controller/crafty-4
+  tag: latest
+  pullPolicy: IfNotPresent
+
+crafty:
+  storage: 10Gi
+  livenessProbe:
+    httpGet:
+      path: "/static/assets/images/auth/login_1.jpg"
+      scheme: "HTTP"
+      port: 8443
+    initialDelaySeconds: 10
+    timeoutSeconds: 5
+    periodSeconds: 20
+  readinessProbe:
+    httpGet:
+      path: "/static/assets/images/auth/login_1.jpg"
+      scheme: "HTTP"
+      port: 8443
+    initialDelaySeconds: 10
+    timeoutSeconds: 5
+    periodSeconds: 20

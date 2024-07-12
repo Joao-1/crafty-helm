@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: crafty
+  labels:
+    app: crafty
+spec:
+  ports:
+  - name: web
+    port: 8443
+  - name: maps
+    port: 8123
+  selector:
+    app: crafty
+  type: ClusterIP

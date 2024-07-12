@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "trackableappname" . }}
+  annotations:
+    {{ if .Values.gitlab.app }}app.gitlab.com/app: {{ .Values.gitlab.app | quote }}{{ end }}
+    {{ if .Values.gitlab.env }}app.gitlab.com/env: {{ .Values.gitlab.env | quote }}{{ end }}
+  labels:
+    app: crafty
+spec:
+  replicas: {{ .Values.replicaCount }}
+{{- if .Values.strategyType }}
+  strategy:
+    type: {{ .Values.strategyType | quote }}
+{{- end }}
+  selector:
+    matchLabels:
+      app: crafty
+  template:
+    metadata:
+      annotations:
+        checksum/application-secrets: "{{ .Values.application.secretChecksum }}"
+        {{ if .Values.gitlab.app }}app.gitlab.com/app: {{ .Values.gitlab.app | quote }}{{ end }}
+        {{ if .Values.gitlab.env }}app.gitlab.com/env: {{ .Values.gitlab.env | quote }}{{ end }}
+      labels:
+        app: crafty
+    spec:
+      imagePullSecrets:
+{{ toYaml .Values.image.secrets | indent 10 }}
+      containers:
+      - name: crafty
+        image: {{ template "imagename" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+{{- if .Values.application.secretName }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.application.secretName }}
+{{- end }}
+        ports:
+        - name: maps
+          containerPort: 8123
+        - name: web
+          containerPort: 8443
+        - name: minecraft1
+          containerPort: 25565
+          hostPort: 25565
+        - name: minecraft2
+          containerPort: 25566
+          hostPort: 25566
+        - name: minecraft3
+          containerPort: 25567
+          hostPort: 25567
+        env:
+        - name: GITLAB_ENVIRONMENT_NAME
+          value: {{ .Values.gitlab.envName }}
+        - name: GITLAB_ENVIRONMENT_URL
+          value: {{ .Values.gitlab.envURL }}
+        livenessProbe:
+{{ toYaml .Values.crafty.livenessProbe | indent 10 }}
+        readinessProbe:
+{{ toYaml .Values.crafty.livenessProbe | indent 10 }}
+        volumeMounts:
+        - name: crafty-data
+          mountPath: /crafty/backups
+          subPath: backups
+        - name: crafty-data
+          mountPath: /crafty/logs
+          subPath: logs
+        - name: crafty-data
+          mountPath: /crafty/servers
+          subPath: servers
+        - name: crafty-data
+          mountPath: /crafty/import
+          subPath: import
+        - name: crafty-data
+          mountPath: /crafty//app/config
+          subPath: config
+      volumes:
+      - name: crafty-data
+        persistentVolumeClaim:
+          claimName: crafty-pvc
