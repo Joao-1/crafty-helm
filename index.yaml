@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  Crafty:
+  - apiVersion: v1
+    created: "2024-07-11T22:28:37.616530366-03:00"
+    description: Crafty Controller Helm chart
+    digest: 9a38c71e5efa2a172d1dfb2054aff63b7cdb04fe44beb5326d10405bb2778ca4
+    icon: https://gitlab.zacanbot.com/oss/crafty-4/-/blob/master/app/web/static/images/crafty.png
+    name: Crafty
+    urls:
+    - https://github.com/Joao-1/crafty-helm/Crafty-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-07-11T22:28:37.616219498-03:00"

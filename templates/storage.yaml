@@ -1,10 +1,9 @@
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
  name: crafty-pvc
  labels:
-   {{- include ".Values.crafty.storage.labels" . | nindent 4 }}  
+   {{- include "crafty.storage.labels" . | nindent 4 }}
 spec:
  storageClassName: {{ .Values.crafty.storage.storageClass }}
  accessModes:
@@ -12,5 +11,4 @@ spec:
  resources:
    requests:
      storage: {{ .Values.crafty.storage.size | quote }}
- {{- end }}
  
