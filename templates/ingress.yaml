@@ -14,7 +14,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: crafty
+            name: crafty-service
             port:
               number: 8443
   - host: {{ .Values.crafty.ingress.host }}
@@ -24,6 +24,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: crafty
+            name: crafty-service
             port:
               number: 8123
