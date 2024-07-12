@@ -3,7 +3,8 @@ apiVersion: v1
 metadata:
  name: crafty-pvc
  labels:
-   {{- include "crafty.storage.labels" . | nindent 4 }}
+    app: crafty
+    scope: games
 spec:
  storageClassName: {{ .Values.crafty.storage.storageClass }}
  accessModes:
