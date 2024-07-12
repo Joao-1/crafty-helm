@@ -27,28 +27,3 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s:%s" .Values.image.repository .Values.image.tag -}}
 {{- end -}}
 {{- end -}}
-
-{{- define "trackableappname" -}}
-{{- $trackableName := printf "%s-%s" (include "appname" .) .Values.application.track -}}
-{{- $trackableName | trimSuffix "-stable" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Get a hostname from URL
-*/}}
-{{- define "hostname" -}}
-{{- . | trimPrefix "http://" | trimPrefix "https://" | trimSuffix "/" | trim | quote -}}
-{{- end -}}
-
-{{- define "fqdn" -}}
-{{- .Values.gitlab.envURL | trimPrefix "http://" | trimPrefix "https://" | trimSuffix "/" | trim -}}
-{{- end -}}
-
-{{/*
-Get SecRule's arguments with unescaped single&double quotes
-*/}}
-{{- define "secrule" -}}
-{{- $operator := .operator | quote | replace "\"" "\\\"" | replace "'" "\\'" -}}
-{{- $action := .action | quote | replace "\"" "\\\"" | replace "'" "\\'" -}}
-{{- printf "SecRule %s %s %s" .variable $operator $action -}}
-{{- end -}}
